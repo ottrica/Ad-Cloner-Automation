@@ -159,9 +159,24 @@ table.shots tr.cta    td.n { box-shadow: inset 2.5pt 0 0 var(--warm); }
 .videocard .vlink { font-family: "DejaVu Sans", sans-serif; font-size: 8.6pt;
                     font-weight: 700; }
 .videocard .vlink a { color: var(--accent); }
+.videocard .vph.packshot { background: #fff; border-bottom: 1px solid var(--hair); text-align: center; padding: 10pt; }
+.videocard .vph.packshot img { width: 30mm; }
 .videocard.placeholder .vph { background: var(--tint); border-bottom: 1px solid var(--hair);
        padding: 22pt 12pt; text-align: center; color: var(--muted);
        font-family: "DejaVu Sans", sans-serif; font-size: 8.4pt; }
+
+/* ---------- product card ---------- */
+.prodcard { display: flex; gap: 14pt; align-items: flex-start;
+            border: 1px solid var(--hair); border-radius: 4px; padding: 12pt;
+            margin: 12pt 0 16pt; page-break-inside: avoid; background: var(--tint); }
+.prodcard img { width: 34mm; flex: none; border-radius: 3px; background: #fff; }
+.prodcard .pbody { font-size: 9.2pt; }
+.prodcard .ptitle { font-family: "DejaVu Sans", sans-serif; font-weight: 700;
+                    font-size: 10pt; color: var(--ink); margin: 0 0 2pt; }
+.prodcard .psub { font-family: "DejaVu Sans", sans-serif; font-size: 8.4pt;
+                  color: var(--muted); margin: 0 0 7pt; }
+.prodcard .pnote { font-size: 8.2pt; color: var(--muted); font-style: italic;
+                   margin: 6pt 0 0; }
 
 /* ---------- contents ---------- */
 .toc { margin: 4pt 0 0; }

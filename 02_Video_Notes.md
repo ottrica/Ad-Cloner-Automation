@@ -1,7 +1,7 @@
 # Part 2 — The Video
 
 **Brand:** Four Atoms *(invented for this assignment — not a real company)*
-**Product:** [PRODUCT NAME]
+**Product:** Four Atoms Glutathione Effervescent Tablets
 **Runtime:** [XX] seconds · 9:16 vertical · [N] shots
 **Character appears in:** [N] of [N] shots
 
@@ -13,6 +13,21 @@
 
 Sharing is set to *anyone with the link can view* — no sign-in required.
 The file is also in this folder as `02_Video/final_video.mp4`.
+
+## The product
+
+<div class="prodcard">
+  <img src="assets/product.png" alt="Four Atoms L-Glutathione effervescent tablets">
+  <div class="pbody">
+    <p class="ptitle">Four Atoms &mdash; L-Glutathione, Radiance + Glow</p>
+    <p class="psub">15 effervescent tablets &middot; watermelon flavour</p>
+    <p>The pack shot used for the CTA card. It meets the input requirement in the
+    SOP's checklist &mdash; clean plain background, product upright and centred,
+    label legible at thumbnail size &mdash; which is what lets the standardised CTA
+    system prompt composite it without a retouching pass.</p>
+    <p class="pnote">Invented brand and packaging, created for this assignment.</p>
+  </div>
+</div>
 
 ## How it maps to the spec
 

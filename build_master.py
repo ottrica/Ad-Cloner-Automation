@@ -113,10 +113,10 @@ below &mdash; nothing depends on hunting for a separate folder.</p>
   </div>
 </div>
 
-<div class="videocard placeholder">
-  <div class="vph">Poster frame to be added &mdash; open the link to watch</div>
+<div class="videocard">
+  <div class="vph packshot"><img src="assets/product.png" alt="Four Atoms pack"></div>
   <div class="vmeta">
-    <p class="vtitle">Part 2 &mdash; Four Atoms</p>
+    <p class="vtitle">Part 2 &mdash; Four Atoms Glutathione Effervescent Tablets</p>
     <p class="vsub">Invented brand &middot; 9:16 &middot; shared anyone-with-link,
        no sign-in required</p>
     <p class="vlink">Watch: <a href="{VIDEO_URL}">Google Drive</a></p>
