@@ -13,6 +13,7 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4
 
 import shots
+from figure import FIG
 from style import CSS
 
 ROOT = pathlib.Path(__file__).parent
@@ -145,6 +146,26 @@ Panels &rarr; Attachments</em>.
 </div>
 """
 
+def flowchart_page() -> str:
+    return """
+<div class="fcpage">
+<h1>The workflow at a glance</h1>
+<p class="lede">One competitor ad in, one finished ad out. Every step below is
+documented in full in Part\u00a03 &mdash; this is the map.</p>
+
+<div class="figure">
+  <img src="assets/workflow_flowchart.svg" alt="Workflow flowchart">
+  <p class="caption"><strong>Figure 1.</strong> The full pipeline, start to finish.
+  Four phases, thirteen steps. The chip on each step names the tool that does the
+  work. <span class="lg gate"></span>&nbsp;<strong>QC&nbsp;gate</strong> marks a step
+  where output is checked and rejected before anything downstream is built;
+  <span class="lg manual"></span>&nbsp;<strong>Manual</strong> marks the one step that
+  is deliberately not automated.</p>
+</div>
+</div>
+"""
+
+
 DIVIDER = """
 <div class="divider">
   <div class="num">{num}</div>
@@ -160,7 +181,8 @@ MD_EXT = ["tables", "fenced_code", "sane_lists"]
 def to_html(md_text: str) -> str:
     md_text = md_text.replace("- [ ] ", "- ☐ ").replace("- [x] ", "- ☑ ")
     html = markdown.markdown(md_text, extensions=MD_EXT)
-    return html.replace("<!--SHOT_TABLE-->", shots.table_html())
+    html = html.replace("<!--SHOT_TABLE-->", shots.table_html())
+    return html.replace("<!--FLOWCHART-->", FIG)
 
 
 def divider(idx: str, title: str) -> str:
@@ -206,7 +228,7 @@ def paginate(src: pathlib.Path, dst: pathlib.Path) -> None:
 
 
 def main() -> None:
-    parts = [COVER, contents_page()]
+    parts = [COVER, contents_page(), flowchart_page()]
 
     for n, (src, label) in enumerate(SECTIONS, 1):
         parts.append(divider(f"Part {n} of 3", label))

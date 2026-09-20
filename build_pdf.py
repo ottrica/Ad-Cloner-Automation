@@ -3,6 +3,7 @@
 import subprocess, sys, pathlib, markdown
 
 import shots
+from figure import FIG
 from style import CSS
 
 ROOT = pathlib.Path(__file__).parent
@@ -18,6 +19,7 @@ def render(md_path: pathlib.Path, pdf_path: pathlib.Path) -> None:
     text = text.replace("- [ ] ", "- ☐ ").replace("- [x] ", "- ☑ ")
     body = markdown.markdown(text, extensions=["tables", "fenced_code", "sane_lists"])
     body = body.replace("<!--SHOT_TABLE-->", shots.table_html())
+    body = body.replace("<!--FLOWCHART-->", FIG)
     html_path = pdf_path.with_suffix(".html")
     html_path.write_text(
         HTML.format(title=md_path.stem, css=CSS, body=body), encoding="utf-8")

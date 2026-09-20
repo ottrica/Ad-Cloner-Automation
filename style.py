@@ -165,6 +165,19 @@ table.shots tr.cta    td.n { box-shadow: inset 2.5pt 0 0 var(--warm); }
        padding: 22pt 12pt; text-align: center; color: var(--muted);
        font-family: "DejaVu Sans", sans-serif; font-size: 8.4pt; }
 
+/* ---------- figures ---------- */
+.fcpage { page-break-before: always; page-break-after: always; }
+.figure { margin: 10pt 0 0; page-break-inside: avoid; }
+.figure img { width: 100%; display: block; }
+.caption { font-family: "DejaVu Sans", sans-serif; font-size: 8pt; color: var(--muted);
+           line-height: 1.5; margin: 9pt 0 0; padding-top: 7pt;
+           border-top: 1px solid var(--hair); }
+.caption strong { color: var(--ink); }
+.caption .lg { display: inline-block; width: 7pt; height: 7pt; border-radius: 1.5px;
+               vertical-align: -.5pt; }
+.caption .lg.gate   { background: #6b7280; }
+.caption .lg.manual { background: #b4531f; }
+
 /* ---------- product card ---------- */
 .prodcard { display: flex; gap: 14pt; align-items: flex-start;
             border: 1px solid var(--hair); border-radius: 4px; padding: 12pt;

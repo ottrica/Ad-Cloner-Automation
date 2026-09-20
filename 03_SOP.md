@@ -18,6 +18,8 @@ Every correct video in this format has the same three-part spine:
 
 A video is **correct** when: the avatar's face is recognisably the same person in every shot she appears in; the room, wardrobe and lighting never change within a video; captions are on every frame; and the hook and CTA fall inside their time windows. A rough-looking video that holds all of these is correct. A beautiful one where the face drifts between shots is not.
 
+<!--FLOWCHART-->
+
 ---
 
 ## 2. Before you start: inputs checklist
