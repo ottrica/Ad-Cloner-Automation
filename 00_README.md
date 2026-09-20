@@ -1,7 +1,7 @@
 # Creative Technologist — Take-Home Assignment
 
 **Dashverse / Frameo**
-Submitted by **[YOUR NAME]** · **[DATE]**
+Submitted by **Manish Das**
 
 ---
 

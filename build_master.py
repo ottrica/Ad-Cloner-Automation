@@ -1,140 +1,127 @@
 #!/usr/bin/env python3
-"""Build the single master submission PDF.
+"""Build the master submission PDF.
 
-Everything the grader needs is inside one file:
-  cover -> Part 1 -> Part 2 -> Part 3 -> Appendix A/B (workflow files, verbatim)
+  cover -> contents -> Part 1 -> Part 2 -> Part 3 -> Appendix A/B
 
-The raw .md workflow files are additionally embedded as PDF file attachments,
-so the operator can extract and use them without retyping out of a page.
+Video previews are rendered from real frames of the reference ad. The raw .md
+workflow files are embedded as PDF file attachments so prompts can be extracted
+rather than retyped.
 """
-import pathlib, subprocess, markdown
+import io, pathlib, subprocess, markdown
 from pypdf import PdfReader, PdfWriter
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import A4
+
+import shots
+from style import CSS
 
 ROOT = pathlib.Path(__file__).parent
 CHROME = "/opt/pw-browsers/chromium-1194/chrome-linux/chrome"
 OUT = ROOT / "Creative_Technologist_Assignment.pdf"
 
-# Documents in reading order. (source file, section label, appendix?)
+AUTHOR = "Manish Das"
+VIDEO_URL = "https://drive.google.com/file/d/12d0oep34td6RuWrTstSrxOsyWaN9Id_C/view"
+
 SECTIONS = [
-    ("01_Production_Spec.md", "Part 1 — Production Spec", False),
-    ("02_Video_Notes.md",     "Part 2 — The Video",       False),
-    ("03_SOP.md",             "Part 3 — Handoff SOP",     False),
+    ("01_Production_Spec.md", "Part 1 — Production Spec"),
+    ("02_Video_Notes.md",     "Part 2 — The Video"),
+    ("03_SOP.md",             "Part 3 — Handoff SOP"),
 ]
 APPENDICES = [
-    ("workflow/ad-cloner.md",   "Appendix A — Workflow File: ad-cloner.md"),
-    ("workflow/prompt_sheet.md", "Appendix B — Prompt Sheet: prompt_sheet.md"),
+    ("workflow/ad-cloner.md",    "Appendix A — Workflow File"),
+    ("workflow/prompt_sheet.md", "Appendix B — Prompt Sheet"),
 ]
 ATTACH = ["workflow/ad-cloner.md", "workflow/prompt_sheet.md",
           "01_Production_Spec.md", "03_SOP.md"]
 
-CSS = """
-@page { size: A4; margin: 18mm 16mm 16mm; }
-@page :first { margin-top: 0; }
-* { box-sizing: border-box; }
-body { font-family: "DejaVu Sans", "Noto Sans", Arial, sans-serif;
-       font-size: 10pt; line-height: 1.47; color: #1c1c1e; margin: 0; }
+BLURBS = {
+    "Part 1 — Production Spec":
+        "Turning &ldquo;we want this, but for us&rdquo; into a written plan another "
+        "team could execute without ever seeing the original.",
+    "Part 2 — The Video":
+        "The proof. Same format, same camera language, invented brand.",
+    "Part 3 — Handoff SOP":
+        "Making myself unnecessary &mdash; the method as a system someone else runs.",
+    "Appendix A — Workflow File":
+        "<code>ad-cloner.md</code> &mdash; the runbook the pipeline executes, verbatim. "
+        "Also attached to this PDF as a file.",
+    "Appendix B — Prompt Sheet":
+        "<code>prompt_sheet.md</code> &mdash; every prompt, copy-pasteable. "
+        "Also attached to this PDF as a file.",
+}
 
-/* cover */
-.cover { height: 247mm; display: flex; flex-direction: column;
-         justify-content: center; page-break-after: always; }
-.cover .kicker { font-size: 9.5pt; letter-spacing: 2.4pt; text-transform: uppercase;
-                 color: #777; margin-bottom: 12pt; }
-.cover h1 { font-size: 34pt; line-height: 1.08; letter-spacing: -1pt;
-            margin: 0 0 14pt; border: 0; }
-.cover .sub { font-size: 12pt; color: #444; line-height: 1.6; }
-.cover .rule { border-top: 2px solid #1c1c1e; margin: 22pt 0; }
-.cover .meta { font-size: 9.5pt; color: #555; line-height: 1.8; }
-
-/* section dividers */
-.divider { page-break-before: always; padding-top: 58mm; page-break-after: always; }
-.divider .num { font-size: 9.5pt; letter-spacing: 2.4pt; text-transform: uppercase;
-                color: #777; }
-.divider h1 { font-size: 27pt; margin: 8pt 0 0; border: 0; letter-spacing: -.6pt; }
-.divider .blurb { font-size: 10.5pt; color: #555; margin-top: 12pt;
-                  max-width: 105mm; line-height: 1.6; }
-
-h1 { font-size: 20pt; margin: 0 0 4pt; letter-spacing: -.4pt; line-height: 1.2; }
-h1 + p { color: #555; margin-top: 0; }
-h2 { font-size: 13.5pt; margin: 15pt 0 6pt; padding-bottom: 4pt;
-     border-bottom: 1.5px solid #1c1c1e; page-break-after: avoid; }
-h3 { font-size: 11pt; margin: 13pt 0 5pt; page-break-after: avoid; }
-h4 { font-size: 10pt; margin: 11pt 0 4pt; page-break-after: avoid; }
-p, li { orphans: 2; widows: 2; }
-strong { color: #000; }
-hr { border: 0; border-top: 1px solid #ddd; margin: 11pt 0; }
-table { border-collapse: collapse; width: 100%; margin: 9pt 0;
-        font-size: 8.4pt; }
-th { background: #f2f2f4; text-align: left; font-weight: 600;
-     border-bottom: 1.5px solid #1c1c1e; }
-th, td { padding: 4.5pt 6pt; vertical-align: top; border-bottom: 1px solid #e3e3e6; }
-tr { page-break-inside: avoid; }
-code { font-family: "DejaVu Sans Mono", monospace; font-size: 8.5pt;
-       background: #f2f2f4; padding: 1pt 3pt; border-radius: 2px; }
-pre { background: #f7f7f9; border: 1px solid #e3e3e6; border-left: 3px solid #1c1c1e;
-      padding: 8pt 10pt; border-radius: 3px; font-size: 8pt; line-height: 1.45;
-      white-space: pre-wrap; page-break-inside: avoid; margin: 8pt 0; }
-pre code { background: none; padding: 0; font-size: inherit; }
-blockquote { border-left: 3px solid #c8c8cc; margin: 9pt 0; padding: 2pt 0 2pt 11pt;
-             color: #444; font-size: 9.2pt; }
-ul, ol { padding-left: 17pt; margin: 6pt 0; }
-li { margin: 2pt 0; }
-a { color: #1c1c1e; }
-.note { background: #f7f7f9; border-left: 3px solid #1c1c1e; padding: 9pt 11pt;
-        font-size: 9.2pt; margin: 10pt 0; }
-"""
-
-COVER = """
+COVER = f"""
 <div class="cover">
   <div class="kicker">Take-Home Assignment</div>
-  <h1>Creative<br>Technologist</h1>
+  <h1>Creative<span class="thin">Technologist</span></h1>
   <div class="sub">Dashverse / Frameo</div>
-  <div class="rule"></div>
+  <div class="accentbar"></div>
   <div class="meta">
-    <strong>Submitted by</strong> [YOUR NAME]<br>
-    <strong>Date</strong> [DATE]<br>
-    <strong>Reference ad</strong> Chicnutrix &ldquo;Glow Advanced&rdquo; &middot;
-      45.6&nbsp;s &middot; 9:16 &middot; 17 shots<br>
-    <strong>Stack</strong> Claude &middot; Higgsfield MCP &middot; GPT-Image &middot;
-      Premiere Pro + Premiere MCP<br>
-    <strong>Part 2 video</strong>
-      <a href="https://drive.google.com/file/d/12d0oep34td6RuWrTstSrxOsyWaN9Id_C/view">
-      Four Atoms &mdash; watch on Google Drive</a>
+    <span class="meta-k">Submitted by</span>{AUTHOR}<br>
+    <span class="meta-k">Reference ad</span>Chicnutrix &ldquo;Glow Advanced&rdquo;
+      &middot; 45.6&nbsp;s &middot; 9:16 &middot; 17 shots<br>
+    <span class="meta-k">Part 2 video</span><a href="{VIDEO_URL}">Four Atoms
+      &mdash; watch on Google Drive</a><br>
+    <span class="meta-k">Stack</span>Claude &middot; Higgsfield MCP &middot;
+      GPT-Image &middot; Premiere Pro + Premiere MCP
+  </div>
+  <div class="strip"><img src="assets/filmstrip.jpg" alt=""></div>
+</div>
+"""
+
+TOC_ROWS = [
+    ("Part 1", "Production Spec",
+     "Teardown of the reference ad: format, camera reasoning, a shot-by-shot table "
+     "with measured timecodes and stills, locked elements, and three client questions."),
+    ("Part 2", "The Video",
+     "The video made for an invented brand, how it maps to the spec, declared "
+     "deviations, and how character consistency was held."),
+    ("Part 3", "Handoff SOP",
+     "Instructions detailed enough for a non-expert to produce the next video in "
+     "this format without asking me anything. Seven sections."),
+    ("Appendix A", "ad-cloner.md",
+     "The workflow file the process actually runs on, reproduced verbatim."),
+    ("Appendix B", "prompt_sheet.md",
+     "Every prompt as a fill-in-the-blank template, reproduced verbatim."),
+]
+
+
+def contents_page() -> str:
+    rows = "".join(
+        f'<div class="toc-row"><div class="tnum">{n}</div>'
+        f'<div class="tbody"><span class="tt">{t}</span><br>'
+        f'<span class="td">{d}</span></div></div>'
+        for n, t, d in TOC_ROWS)
+    return f"""
+<h1>Contents</h1>
+<p class="lede">Everything in this submission is inside this one file. The workflow
+files are also embedded as attachments, and the two videos are linked and previewed
+below &mdash; nothing depends on hunting for a separate folder.</p>
+<div class="toc">{rows}</div>
+
+<h2>The two videos</h2>
+
+<div class="videocard">
+  <div class="vstrip"><img src="assets/filmstrip.jpg" alt="Reference ad frames"></div>
+  <div class="vmeta">
+    <p class="vtitle">Reference &mdash; Chicnutrix &ldquo;Glow Advanced&rdquo;</p>
+    <p class="vsub">45.6&nbsp;s &middot; 720&times;1280 &middot; 30&nbsp;fps &middot;
+       17 shots &middot; analysed in Part 1</p>
+    <p class="vlink">Watch: <span style="color:#c2185b">[PASTE THE PUBLIC AD LINK]</span></p>
   </div>
 </div>
 
-<h1>Contents</h1>
-<p>This document contains the complete submission. Everything referenced below is
-inside this file &mdash; nothing depends on an external link resolving.</p>
-
-<table>
-<tr><th>Section</th><th>What it covers</th></tr>
-<tr><td><strong>Part 1</strong> &mdash; Production Spec</td>
-    <td>Teardown of the reference ad: format, camera reasoning, full shot-by-shot
-        table with real timecodes, locked elements, and three questions for the
-        client.</td></tr>
-<tr><td><strong>Part 2</strong> &mdash; The Video</td>
-    <td>The 20&ndash;30&nbsp;second video made for an invented brand, how it maps
-        to the spec, declared deviations, and how character consistency was
-        held.</td></tr>
-<tr><td><strong>Part 3</strong> &mdash; Handoff SOP</td>
-    <td>Instructions detailed enough for a non-expert to produce the next video
-        in this format without asking me anything. Seven sections.</td></tr>
-<tr><td><strong>Appendix A</strong> &mdash; <code>ad-cloner.md</code></td>
-    <td>The workflow file the process actually runs on, reproduced verbatim.</td></tr>
-<tr><td><strong>Appendix B</strong> &mdash; <code>prompt_sheet.md</code></td>
-    <td>Every prompt as a fill-in-the-blank template, reproduced verbatim.</td></tr>
-</table>
-
-<div class="note">
-<strong>The workflow files are attached to this PDF, not just printed in it.</strong>
-Both <code>.md</code> files are embedded as file attachments, so the prompts can be
-extracted and used directly rather than retyped. Open the attachments pane in your
-PDF reader &mdash; the paperclip icon in Acrobat, or
-<em>View &rarr; Navigation Panels &rarr; Attachments</em>. They are also supplied as
-loose files alongside this PDF in the submission folder.
+<div class="videocard placeholder">
+  <div class="vph">Poster frame to be added &mdash; open the link to watch</div>
+  <div class="vmeta">
+    <p class="vtitle">Part 2 &mdash; Four Atoms</p>
+    <p class="vsub">Invented brand &middot; 9:16 &middot; shared anyone-with-link,
+       no sign-in required</p>
+    <p class="vlink">Watch: <a href="{VIDEO_URL}">Google Drive</a></p>
+  </div>
 </div>
 
-<h2>How the video was made, in one paragraph</h2>
+<h2>How the video was made</h2>
 <p>A competitor ad is selected through an ad-intelligence tool and analysed into a
 three-part structure &mdash; hook, mid-section, CTA &mdash; with every cut, B-roll
 position and camera motion recorded. The script is rewritten for the new brand and,
@@ -145,84 +132,104 @@ no more than ten seconds each, every beat is generated as talking-head video thr
 the Higgsfield MCP, and the clips are placed on a Premiere Pro timeline through the
 Premiere MCP. The hook is rebuilt separately with motion, the CTA card is composited
 from the product image, B-roll is generated and trimmed by hand, and SFX and music
-come from an in-house Premiere library. Full detail in Part 3.</p>
+come from an in-house Premiere library. Full detail in Part&nbsp;3.</p>
+
+<div class="note">
+<strong>The workflow files are attached to this PDF, not just printed in it.</strong>
+Both <code>.md</code> files are embedded as file attachments, so the prompts can be
+extracted and used directly rather than retyped. Open the attachments pane in your
+PDF reader &mdash; the paperclip icon in Acrobat, or <em>View &rarr; Navigation
+Panels &rarr; Attachments</em>.
+</div>
 """
 
 DIVIDER = """
 <div class="divider">
   <div class="num">{num}</div>
   <h1>{title}</h1>
+  <div class="rule"></div>
   <div class="blurb">{blurb}</div>
 </div>
 """
-
-BLURBS = {
-    "Part 1 — Production Spec":
-        "Turning &ldquo;we want this, but for us&rdquo; into a written plan another "
-        "team could execute without ever seeing the original.",
-    "Part 2 — The Video":
-        "The proof. Same format, same camera language, invented brand.",
-    "Part 3 — Handoff SOP":
-        "Making myself unnecessary &mdash; the method as a system someone else runs.",
-    "Appendix A — Workflow File: ad-cloner.md":
-        "The runbook the pipeline executes, verbatim. Also attached to this PDF as a file.",
-    "Appendix B — Prompt Sheet: prompt_sheet.md":
-        "Every prompt, copy-pasteable. Also attached to this PDF as a file.",
-}
 
 MD_EXT = ["tables", "fenced_code", "sane_lists"]
 
 
 def to_html(md_text: str) -> str:
     md_text = md_text.replace("- [ ] ", "- ☐ ").replace("- [x] ", "- ☑ ")
-    return markdown.markdown(md_text, extensions=MD_EXT)
+    html = markdown.markdown(md_text, extensions=MD_EXT)
+    return html.replace("<!--SHOT_TABLE-->", shots.table_html())
 
 
 def divider(idx: str, title: str) -> str:
-    return DIVIDER.format(num=idx, title=title, blurb=BLURBS[title])
+    return DIVIDER.format(num=idx, title=title.split(" — ")[1],
+                          blurb=BLURBS[title]).replace(
+        "<h1>", f'<h1>')
+
+
+def esc(raw: str) -> str:
+    return raw.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+
+
+def paginate(src: pathlib.Path, dst: pathlib.Path) -> None:
+    """Stamp page numbers and a running footer on every page but the cover."""
+    reader = PdfReader(str(src))
+    writer = PdfWriter()
+    total = len(reader.pages)
+    for i, page in enumerate(reader.pages):
+        if i:
+            buf = io.BytesIO()
+            c = canvas.Canvas(buf, pagesize=A4)
+            c.setFont("Helvetica", 7)
+            c.setFillColorRGB(.42, .45, .50)
+            c.drawString(48, 30, f"{AUTHOR}  ·  Creative Technologist Assignment")
+            c.drawRightString(A4[0] - 48, 30, f"{i + 1} / {total}")
+            c.setStrokeColorRGB(.89, .89, .91)
+            c.setLineWidth(.5)
+            c.line(48, 40, A4[0] - 48, 40)
+            c.save()
+            buf.seek(0)
+            page.merge_page(PdfReader(buf).pages[0])
+        writer.add_page(page)
+    for rel in ATTACH:
+        p = ROOT / rel
+        writer.add_attachment(p.name, p.read_bytes())
+    writer.add_metadata({
+        "/Title": "Creative Technologist — Take-Home Assignment",
+        "/Author": AUTHOR,
+        "/Subject": "Dashverse / Frameo — Parts 1-3 with workflow files attached",
+    })
+    with open(dst, "wb") as fh:
+        writer.write(fh)
 
 
 def main() -> None:
-    parts = [COVER]
+    parts = [COVER, contents_page()]
 
-    for n, (src, label, _) in enumerate(SECTIONS, 1):
+    for n, (src, label) in enumerate(SECTIONS, 1):
         parts.append(divider(f"Part {n} of 3", label))
         parts.append(to_html((ROOT / src).read_text(encoding="utf-8")))
 
     for letter, (src, label) in zip("AB", APPENDICES):
         parts.append(divider(f"Appendix {letter}", label))
-        raw = (ROOT / src).read_text(encoding="utf-8")
-        # verbatim, so the reader sees exactly what the file contains
-        parts.append("<pre><code>" +
-                     raw.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;") +
-                     "</code></pre>")
+        parts.append("<pre><code>" + esc((ROOT / src).read_text(encoding="utf-8"))
+                     + "</code></pre>")
 
     html = ('<!DOCTYPE html><html><head><meta charset="utf-8">'
-            f'<title>Creative Technologist — Take-Home Assignment</title>'
+            '<title>Creative Technologist — Take-Home Assignment</title>'
             f'<style>{CSS}</style></head><body>{"".join(parts)}</body></html>')
 
     tmp_html = ROOT / "_master.html"
     tmp_html.write_text(html, encoding="utf-8")
-    raw_pdf = ROOT / "_master_raw.pdf"
+    raw = ROOT / "_master_raw.pdf"
     subprocess.run([
         CHROME, "--headless", "--disable-gpu", "--no-sandbox",
         "--no-pdf-header-footer", "--run-all-compositor-stages-before-draw",
-        f"--print-to-pdf={raw_pdf}", tmp_html.as_uri(),
+        f"--print-to-pdf={raw}", tmp_html.as_uri(),
     ], check=True, capture_output=True)
 
-    # embed the raw source files as real PDF attachments
-    writer = PdfWriter(clone_from=str(raw_pdf))
-    for rel in ATTACH:
-        path = ROOT / rel
-        writer.add_attachment(path.name, path.read_bytes())
-    writer.add_metadata({
-        "/Title": "Creative Technologist — Take-Home Assignment",
-        "/Subject": "Dashverse / Frameo — Parts 1-3 with workflow files attached",
-    })
-    with open(OUT, "wb") as fh:
-        writer.write(fh)
-
-    tmp_html.unlink(); raw_pdf.unlink()
+    paginate(raw, OUT)
+    tmp_html.unlink(); raw.unlink()
     print(f"{OUT.name}: {len(PdfReader(str(OUT)).pages)} pages, "
           f"{OUT.stat().st_size // 1024} KB, {len(ATTACH)} files attached")
 

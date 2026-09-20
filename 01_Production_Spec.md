@@ -37,25 +37,7 @@ The job it does for the brand: **reframe the buyer's problem so the product beco
 **Structure:** Hook `0.00–8.10` (8.1 s) · Mid `8.10–42.23` (34.1 s) · CTA `42.23–45.59` (3.4 s)
 **Shot mix:** 6 A-roll segments · 10 B-roll/CG inserts · 1 end card
 
-| # | In – Out | Dur | Type | What's in frame | What happens |
-|---|---|---|---|---|---|
-| 1 | 0.00 – 6.67 | 6.67 | A-roll | MS presenter, pink dress, beige wall, white facial roller in hand | Full hook line delivered to camera; gestures with roller |
-| 2 | 6.67 – 8.10 | 1.43 | B-roll | ECU cheek, visible pigmentation | "a cream for pigmentation" |
-| 3 | 8.10 – 9.77 | 1.67 | B-roll | ECU neck / jawline | "a serum for hydration" |
-| 4 | 9.77 – 9.90 | 0.13 | A-roll | MS presenter | Single-frame flash cutback — rhythmic punctuation |
-| 5 | 9.90 – 10.83 | 0.93 | B-roll | ECU under-eye, finger touching skin | "a treatment for breakouts" |
-| 6 | 10.83 – 12.43 | 1.60 | B-roll | CU green clay mask, gua-sha tool | "a mask for dullness" |
-| 7 | 12.43 – 15.77 | 3.34 | A-roll | MS presenter | "and somehow…" — pace resets, turn into the pitch |
-| 8 | 15.77 – 18.80 | 3.03 | Product | 3 tubes on plinth, brand lockup | Product reveal, name on screen |
-| 9 | 18.80 – 23.07 | 4.27 | B-roll | Effervescent tablet dropping into water glass | Hero ingredient named on screen |
-| 10 | 23.07 – 25.30 | 2.23 | B-roll | CU presenter drinking through straw | "antioxidant" — shows the ritual |
-| 11 | 25.30 – 28.90 | 3.60 | A-roll | MS presenter | "to slow signs of…" |
-| 12 | 28.90 – 33.57 | 4.67 | CG | Liposome spheres, iridescent | Delivery-technology claim |
-| 13 | 33.57 – 36.83 | 3.26 | CG | Bubbles inside membrane | "for faster absorption and impact" |
-| 14 | 36.83 – 39.17 | 2.34 | A-roll | MS presenter | "11 more skin-lovin' ingredients" |
-| 15 | 39.17 – 40.83 | 1.66 | B-roll | Before/after split, same face | "Get visible results" |
-| 16 | 40.83 – 42.23 | 1.40 | A-roll | MS presenter | "In 6 weeks* only" |
-| 17 | 42.23 – 45.59 | 3.36 | CTA | Logo end card on cream | Brand lockup + tagline |
+<!--SHOT_TABLE-->
 
 ---
 
