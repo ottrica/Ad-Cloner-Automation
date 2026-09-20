@@ -165,6 +165,24 @@ table.shots tr.cta    td.n { box-shadow: inset 2.5pt 0 0 var(--warm); }
        padding: 22pt 12pt; text-align: center; color: var(--muted);
        font-family: "DejaVu Sans", sans-serif; font-size: 8.4pt; }
 
+/* ---------- use-case page ---------- */
+.ucpage { page-break-after: always; }
+.ucpage .lede { font-size: 12.5pt; line-height: 1.45; font-weight: 400;
+                margin-bottom: 16pt; padding-left: 12pt; }
+.split { display: flex; gap: 10pt; margin: 14pt 0; page-break-inside: avoid; }
+.split .col { flex: 1; border: 1px solid var(--hair); border-radius: 4px;
+              padding: 10pt 12pt 6pt; }
+.split .col.inherit { background: var(--tint); }
+.split .col.invent  { background: #fdf2f6; border-color: #f3cfdd; }
+.split .ch { font-family: "DejaVu Sans", sans-serif; font-size: 7.6pt;
+             letter-spacing: 1.6pt; text-transform: uppercase; font-weight: 700;
+             margin: 0 0 6pt; }
+.split .col.inherit .ch { color: var(--muted); }
+.split .col.invent  .ch { color: var(--accent); }
+.split ul { margin: 0; padding-left: 13pt; }
+.split li { font-size: 9pt; margin: 2.5pt 0; }
+.ucnote { margin-top: 16pt; }
+
 /* ---------- figures ---------- */
 .fcpage { page-break-before: always; page-break-after: always; }
 .figure { margin: 10pt 0 0; page-break-inside: avoid; }

@@ -14,6 +14,7 @@ from reportlab.lib.pagesizes import A4
 
 import shots
 from figure import FIG
+from usecase import USECASE
 from style import CSS
 
 ROOT = pathlib.Path(__file__).parent
@@ -228,7 +229,7 @@ def paginate(src: pathlib.Path, dst: pathlib.Path) -> None:
 
 
 def main() -> None:
-    parts = [COVER, contents_page(), flowchart_page()]
+    parts = [COVER, USECASE, contents_page(), flowchart_page()]
 
     for n, (src, label) in enumerate(SECTIONS, 1):
         parts.append(divider(f"Part {n} of 3", label))
