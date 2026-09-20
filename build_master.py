@@ -21,6 +21,7 @@ OUT = ROOT / "Creative_Technologist_Assignment.pdf"
 
 AUTHOR = "Manish Das"
 VIDEO_URL = "https://drive.google.com/file/d/12d0oep34td6RuWrTstSrxOsyWaN9Id_C/view"
+REF_URL = "https://www.facebook.com/ads/library/?id=1393506182719580"
 
 SECTIONS = [
     ("01_Production_Spec.md", "Part 1 — Production Spec"),
@@ -58,8 +59,9 @@ COVER = f"""
   <div class="accentbar"></div>
   <div class="meta">
     <span class="meta-k">Submitted by</span>{AUTHOR}<br>
-    <span class="meta-k">Reference ad</span>Chicnutrix &ldquo;Glow Advanced&rdquo;
-      &middot; 45.6&nbsp;s &middot; 9:16 &middot; 17 shots<br>
+    <span class="meta-k">Reference ad</span><a href="{REF_URL}">Chicnutrix
+      &ldquo;Glow Advanced&rdquo;</a> &middot; 45.6&nbsp;s &middot; 9:16
+      &middot; 17 shots<br>
     <span class="meta-k">Part 2 video</span><a href="{VIDEO_URL}">Four Atoms
       &mdash; watch on Google Drive</a><br>
     <span class="meta-k">Stack</span>Claude &middot; Higgsfield MCP &middot;
@@ -107,7 +109,7 @@ below &mdash; nothing depends on hunting for a separate folder.</p>
     <p class="vtitle">Reference &mdash; Chicnutrix &ldquo;Glow Advanced&rdquo;</p>
     <p class="vsub">45.6&nbsp;s &middot; 720&times;1280 &middot; 30&nbsp;fps &middot;
        17 shots &middot; analysed in Part 1</p>
-    <p class="vlink">Watch: <span style="color:#c2185b">[PASTE THE PUBLIC AD LINK]</span></p>
+    <p class="vlink">Watch: <a href="{REF_URL}">Meta Ad Library</a></p>
   </div>
 </div>
 

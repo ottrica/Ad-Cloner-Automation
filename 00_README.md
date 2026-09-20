@@ -24,7 +24,7 @@ Submitted by **Manish Das**
 ## Reference ad analysed in Part 1
 
 Chicnutrix "Glow Advanced" — 45.6 s · 9:16 vertical · 17 shots
-Public link: **[PASTE URL]**
+Public link: [Meta Ad Library](https://www.facebook.com/ads/library/?id=1393506182719580)
 
 ---
 

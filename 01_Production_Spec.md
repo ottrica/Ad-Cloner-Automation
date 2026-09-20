@@ -1,7 +1,7 @@
 # Production Spec — Reference Ad Teardown
 
 **Reference ad:** Chicnutrix "Glow Advanced" — influencer/UGC performance ad
-**Public link:** `[PASTE PUBLIC URL HERE BEFORE SUBMITTING]`
+**Public link:** [Meta Ad Library — ad ID 1393506182719580](https://www.facebook.com/ads/library/?id=1393506182719580)
 **Runtime:** 45.6 s · 720×1280 (9:16 vertical) · 30 fps · 17 shots
 **Analysed by:** frame-accurate scene-cut detection (threshold 0.25) + shot-by-shot frame extraction
 
