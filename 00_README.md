@@ -10,7 +10,7 @@ Submitted by **[YOUR NAME]** · **[DATE]**
 | # | File | Assignment part |
 |---|---|---|
 | 01 | `01_Production_Spec.pdf` | **Part 1** — production spec of the reference ad |
-| 02 | `02_Video/final_video.mp4` | **Part 2** — the 20–30 s video, made for an invented brand |
+| 02 | [`Four Atoms` — watch the video](https://drive.google.com/file/d/12d0oep34td6RuWrTstSrxOsyWaN9Id_C/view) | **Part 2** — the video, made for an invented brand |
 | 02 | `02_Video/deviation_notes.md` | Part 2 — what I changed from my own spec, and why |
 | 03 | `03_SOP.pdf` | **Part 3** — handoff instructions |
 | 03 | `workflow/ad-cloner.md` | Part 3 §3 — the workflow file the process runs on |

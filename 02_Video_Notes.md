@@ -1,14 +1,17 @@
 # Part 2 — The Video
 
-**Brand:** [INVENTED BRAND NAME] *(invented for this assignment — not a real company)*
-**Product:** [INVENTED PRODUCT NAME]
+**Brand:** Four Atoms *(invented for this assignment — not a real company)*
+**Product:** [PRODUCT NAME]
 **Runtime:** [XX] seconds · 9:16 vertical · [N] shots
 **Character appears in:** [N] of [N] shots
 
 ## Watch it
 
-**Video link:** `[PASTE SHAREABLE LINK — set to "anyone with the link can view"]`
+**▶ [Watch the video](https://drive.google.com/file/d/12d0oep34td6RuWrTstSrxOsyWaN9Id_C/view?usp=drive_link)**
 
+`https://drive.google.com/file/d/12d0oep34td6RuWrTstSrxOsyWaN9Id_C/view`
+
+Sharing is set to *anyone with the link can view* — no sign-in required.
 The file is also in this folder as `02_Video/final_video.mp4`.
 
 ## How it maps to the spec

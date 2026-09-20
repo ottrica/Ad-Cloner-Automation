@@ -95,7 +95,10 @@ COVER = """
     <strong>Reference ad</strong> Chicnutrix &ldquo;Glow Advanced&rdquo; &middot;
       45.6&nbsp;s &middot; 9:16 &middot; 17 shots<br>
     <strong>Stack</strong> Claude &middot; Higgsfield MCP &middot; GPT-Image &middot;
-      Premiere Pro + Premiere MCP
+      Premiere Pro + Premiere MCP<br>
+    <strong>Part 2 video</strong>
+      <a href="https://drive.google.com/file/d/12d0oep34td6RuWrTstSrxOsyWaN9Id_C/view">
+      Four Atoms &mdash; watch on Google Drive</a>
   </div>
 </div>
 
